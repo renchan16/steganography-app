@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Steganography App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 Image Steganography</h1>
+            <p class="subtitle">Hide secret messages in images or reveal hidden content</p>
+        </header>
+
+        <div class="card-container">
+            <div class="card">
+                <div class="card-header">
+                    <h2>🔏 Hide Message</h2>
+                    <p>Encode a secret message into an image</p>
+                </div>
+                <form method="POST" enctype="multipart/form-data" class="card-body">
+                    <div class="form-group">
+                        <label for="image">Select Image (PNG):</label>
+                        <div class="file-input-container">
+                            <input type="file" name="image" id="image" accept="image/*" required>
+                            <div class="file-input-button">Choose File</div>
+                            <span class="file-name">No file chosen</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Secret Message:</label>
+                        <textarea name="message" id="message" rows="4" placeholder="Type your secret message here..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" name="encode" class="btn btn-primary">
+                        <span class="btn-icon">🔒</span> Encode Message
+                    </button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>🔍 Reveal Message</h2>
+                    <p>Decode a hidden message from an image</p>
+                </div>
+                <form method="POST" enctype="multipart/form-data" class="card-body">
+                    <div class="form-group">
+                        <label for="stego_image">Upload Image with Hidden Message:</label>
+                        <div class="file-input-container">
+                            <input type="file" name="stego_image" id="stego_image" accept="image/*" required>
+                            <div class="file-input-button">Choose File</div>
+                            <span class="file-name">No file chosen</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" name="decode" class="btn btn-secondary">
+                        <span class="btn-icon">🔓</span> Decode Message
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="result" id="result">
+            <!-- This section will be populated dynamically -->
+            {% if message %}
+                <div class="result-card">
+                    <h3>Decoded Message:</h3>
+                    <div class="message-box">{{ message }}</div>
+                </div>
+            {% endif %}
+            
+            {% if image_available %}
+                <div class="result-card">
+                    <h3>Success!</h3>
+                    <p>✅ Message hidden successfully!</p>
+                    <a href="{{ url_for('download') }}" class="btn btn-download">
+                        <span class="btn-icon">⬇️</span> Download Image
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>Secure Image Steganography Tool &copy; 2025</p>
+    </footer>
+
+    <script>
+        // Simple script to show selected filename
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+                this.parentElement.querySelector('.file-name').textContent = fileName;
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+ 
